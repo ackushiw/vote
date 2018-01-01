@@ -1,6 +1,7 @@
 <template>
   <main class="container" v-if="uid">
-    <div style="padding: 32px">
+    <h1>VOTES: {{votes.length}}</h1>
+    <div style="padding: 32px" v-if="votes.length === 6">
       <h1>PASSES: {{passes.length}}</h1>
       <h1>FAILED: {{fails.length}}</h1>
     </div>
@@ -31,6 +32,7 @@ export default {
       uid: null,
       passes: [],
       fails: [],
+      votes: [],
       pages: [{
         title: 'TEST',
         color: 'blue'
@@ -58,18 +60,22 @@ export default {
       if (snap.exists()) {
         let passes = []
         let fails = []
+        let votes = []
         snap.forEach(childSnap => {
           if (childSnap.val() === 'PASS') {
             passes.push(childSnap.val())
           } else {
             fails.push(childSnap.val())
           }
+          votes.push(childSnap.val())
         })
         vm.passes = passes
         vm.fails = fails
+        vm.votes = votes
       } else {
         vm.passes = []
         vm.fails = []
+        vm.votes = []
       }
     })
     firebase.auth().signInAnonymously().then(user => {
