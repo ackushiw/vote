@@ -25,6 +25,8 @@ export default ({ store }) => {
       })
       console.log('ARRAY', votes)
       store.commit('setVotes', votes)
+    } else {
+      store.commit('setVotes', [])
     }
   })
 }
