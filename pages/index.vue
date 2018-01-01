@@ -5,12 +5,12 @@
     <h1 style="color: green" v-if="voted">Voted!</h1>
     <div style="padding: 32px" v-if="show">
       <h1>PASSES: {{getPassCount}}</h1>
-      <h1>FAILED: {{getFailCount}}</h1>
+      <h1>FAILS: {{getFailCount}}</h1>
     </div>
     <div class="row">
 
-    <button @click.stop="addVote('PASS')">PASS</button>
-    <button @click.stop="addVote('FAIL')">FAIL</button>
+    <button class="pass" @click.stop="addVote('PASS')">PASS</button>
+    <button class="fail" @click.stop="addVote('FAIL')">FAIL</button>
     </div>
     <br>
     <br>
@@ -77,9 +77,16 @@ button {
   padding: 32px;
   font-size: 32px;
 }
+
 button:hover {
   background: lightcoral;
   color: white;
+}
+button.pass:hover {
+  color: green;
+}
+button.fail:hover {
+  color: red;
 }
 .row {
   display: flex;
