@@ -16,7 +16,7 @@
     <br>
     <div class="row">
       <button @click.stop="handleReset"> RESET</button>
-      <button @click.stop="handleShow(show)"> {{show ? 'HIDE' : 'REVEAL'}}</button>
+      <button @click.stop="handleShow"> {{show ? 'HIDE' : 'REVEAL'}}</button>
     </div>
     <!-- <section v-for="(page, i) in pages" :class="`section-${i} ${active === i ? 'active' : ''}`" :key="i" :style="`background-color: ${page.color}`" @click.stop="active = i">
       <button @click.stop="active = null">close</button>
@@ -83,10 +83,10 @@ button:hover {
   color: white;
 }
 button.pass:hover {
-  color: green;
+  background: green;
 }
 button.fail:hover {
-  color: red;
+  background: red;
 }
 .row {
   display: flex;
