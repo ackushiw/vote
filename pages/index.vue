@@ -1,15 +1,16 @@
 <template>
   <main class="container" v-if="uid">
-    <h1>VOTES: {{votes.length}}</h1>
+    <pre>{{uid}}</pre>
+    <h1>VOTES: {{getVoteCount}}</h1>
     <h1 style="color: green" v-if="voted">Voted!</h1>
     <div style="padding: 32px" v-if="show">
-      <h1>PASSES: {{passes.length}}</h1>
-      <h1>FAILED: {{fails.length}}</h1>
+      <h1>PASSES: {{getPassCount}}</h1>
+      <h1>FAILED: {{getFailCount}}</h1>
     </div>
     <div class="row">
 
-    <button @click.stop="handlePass(uid)">PASS</button>
-    <button @click.stop="handleFail(uid)">FAIL</button>
+    <button @click.stop="addVote('PASS')">PASS</button>
+    <button @click.stop="addVote('FAIL')">FAIL</button>
     </div>
     <br>
     <br>
@@ -26,38 +27,22 @@
 </template>
 
 <script>
-import * as firebase from 'firebase/app'
-import 'firebase/database'
-import 'firebase/auth'
-const db = firebase.database()
-const ref = db.ref('votes')
+import {mapGetters, mapState, mapActions} from 'vuex'
 export default {
-  // firebase: {
-  //   // simple syntax, bind as an array by default
-  //   votes: ref,
-  //   passes: ref.orderByValue().equalTo('PASS'),
-  //   fails: ref.orderByValue().equalTo('FAIL'),
-  //   // can also bind to a query
-  //   // anArray: db.ref('url/to/my/collection').limitToLast(25)
-  //   // full syntax
-  //   show: {
-  //     source: db.ref('show'),
-  //     // optionally bind as an object
-  //     asObject: true,
-  //     // optionally provide the cancelCallback
-  //     cancelCallback: function () {},
-  //     // this is called once the data has been retrieved from firebase
-  //     readyCallback: function () {}
-  //   }
-  // },
+  computed: {
+    ...mapGetters([
+      'getVoteCount',
+      'getPassCount',
+      'getFailCount'
+    ]),
+    ...mapState({
+      uid: state => state.uid,
+      show: state => state.show
+    })
+  },
   data () {
     return {
       active: null,
-      uid: null,
-      passes: [],
-      fails: [],
-      votes: [],
-      show: false,
       voted: false,
       pages: [{
         title: 'TEST',
@@ -74,62 +59,12 @@ export default {
       }]
     }
   },
-  mounted () {
-    const vm = this
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        console.log('USER', user.uid)
-        vm.uid = user.uid
-      }
-    })
-    db.ref('show').on('value', snap => {
-      vm.show = snap.exists() && snap.val()
-    })
-    ref.on('value', snap => {
-      if (snap.exists()) {
-        let passes = []
-        let fails = []
-        let votes = []
-        snap.forEach(childSnap => {
-          if (childSnap.val() === 'PASS') {
-            passes.push(childSnap.val())
-          } else {
-            fails.push(childSnap.val())
-          }
-          votes.push(childSnap.val())
-        })
-        vm.passes = passes
-        vm.fails = fails
-        vm.votes = votes
-      } else {
-        vm.passes = []
-        vm.fails = []
-        vm.votes = []
-        vm.show = false
-        vm.voted = false
-      }
-    })
-    firebase.auth().signInAnonymously().then(user => {
-      console.log('signon', user.uid)
-    }).catch(err => console.error(err))
-  },
   methods: {
-    handlePass (uid) {
-      console.log('pass', uid)
-      ref.child(uid).set('PASS')
-      this.voted = true
-    },
-    handleFail (uid) {
-      console.log('fail', uid)
-      ref.child(uid).set('FAIL')
-      this.voted = true
-    },
-    handleReset () {
-      ref.remove()
-    },
-    handleShow (show) {
-      db.ref('show').set(!show)
-    }
+    ...mapActions([
+      'addVote',
+      'handleReset',
+      'handleShow'
+    ])
   }
 }
 </script>

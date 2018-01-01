@@ -12,7 +12,6 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   mode: 'spa',
-  plugins: ['~/plugins/firebase'],
   /*
   ** Customize the progress bar color
   */

@@ -11,4 +11,5 @@ const config = {
   messagingSenderId: '5437409204'
 }
 firebase.initializeApp(config)
+console.log('INIT')
 Vue.use(VueFire)
