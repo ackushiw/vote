@@ -1,11 +1,13 @@
 <template>
   <main class="container" v-if="uid">
     <h1>VOTES: {{votes.length}}</h1>
+    <h1 style="color: green" v-if="voted">Voted!</h1>
     <div style="padding: 32px" v-if="show">
       <h1>PASSES: {{passes.length}}</h1>
       <h1>FAILED: {{fails.length}}</h1>
     </div>
     <div class="row">
+
     <button @click.stop="handlePass(uid)">PASS</button>
     <button @click.stop="handleFail(uid)">FAIL</button>
     </div>
