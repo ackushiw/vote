@@ -16,6 +16,7 @@ const votesRef = ref.child('votes')
 export const state = () => ({
   show: false,
   uid: null,
+  voted: false,
   votes: []
 })
 
@@ -26,19 +27,24 @@ export const mutations = {
   setVotes (state, votes) {
     state.votes = votes
   },
+  setVoted (state, voted) {
+    state.voted = voted
+  },
   setUser (state, uid) {
     state.uid = uid
   }
 }
 
 export const actions = {
-  addVote ({ state }, vote) {
+  addVote ({ commit, state }, vote) {
+    commit('setVoted', true)
     console.log('ACTION_VOTE', state.uid)
     votesRef.child(state.uid).set(vote)
   },
   handleReset ({ commit }) {
     console.log('RESET')
     votesRef.remove()
+    commit('setVoted', false)
     commit('setVotes', [])
   },
   handleShow ({ state }) {

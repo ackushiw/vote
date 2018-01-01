@@ -37,13 +37,13 @@ export default {
     ]),
     ...mapState({
       uid: state => state.uid,
-      show: state => state.show
+      show: state => state.show,
+      voted: state => state.voted
     })
   },
   data () {
     return {
       active: null,
-      voted: false,
       pages: [{
         title: 'TEST',
         color: 'blue'
