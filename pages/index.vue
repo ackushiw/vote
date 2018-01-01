@@ -78,9 +78,11 @@ export default {
   },
   methods: {
     handlePass (uid) {
+      console.log('pass', uid)
       ref.child(uid).set('PASS')
     },
     handleFail (uid) {
+      console.log('fail', uid)
       ref.child(uid).set('FAIL')
     },
     handleReset () {
