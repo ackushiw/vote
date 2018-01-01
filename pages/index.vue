@@ -79,14 +79,14 @@ button {
 }
 
 button:hover {
-  background: lightcoral;
+  background: lightblue;
   color: white;
 }
-button.pass:hover {
-  background: green;
+button.pass:hover, button.pass:active {
+  background: lightseagreen;
 }
-button.fail:hover {
-  background: red;
+button.fail:hover, button.fail:active {
+  background: lightcoral;
 }
 .row {
   display: flex;
