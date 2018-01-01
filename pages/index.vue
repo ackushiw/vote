@@ -1,17 +1,20 @@
 <template>
   <main class="container" v-if="uid">
     <h1>VOTES: {{votes.length}}</h1>
-    <div style="padding: 32px" v-if="votes.length === 6">
+    <div style="padding: 32px" v-if="show">
       <h1>PASSES: {{passes.length}}</h1>
       <h1>FAILED: {{fails.length}}</h1>
     </div>
     <div class="row">
-    <button @click="handlePass(uid)">PASS</button>
-    <button @click="handleFail(uid)">FAIL</button>
+    <button @click.stop="handlePass(uid)">PASS</button>
+    <button @click.stop="handleFail(uid)">FAIL</button>
     </div>
     <br>
     <br>
-    <button @click="handleReset">RESET</button>
+    <div class="row">
+      <button @click.stop="handleReset"> RESET</button>
+      <button @click.stop="show = true"> REVEAL</button>
+    </div>
     <!-- <section v-for="(page, i) in pages" :class="`section-${i} ${active === i ? 'active' : ''}`" :key="i" :style="`background-color: ${page.color}`" @click.stop="active = i">
       <button @click.stop="active = null">close</button>
       {{page.title}}
@@ -33,6 +36,8 @@ export default {
       passes: [],
       fails: [],
       votes: [],
+      show: false,
+      voted: false,
       pages: [{
         title: 'TEST',
         color: 'blue'
@@ -76,6 +81,8 @@ export default {
         vm.passes = []
         vm.fails = []
         vm.votes = []
+        vm.show = false
+        vm.voted = false
       }
     })
     firebase.auth().signInAnonymously().then(user => {
@@ -86,10 +93,12 @@ export default {
     handlePass (uid) {
       console.log('pass', uid)
       ref.child(uid).set('PASS')
+      this.voted = true
     },
     handleFail (uid) {
       console.log('fail', uid)
       ref.child(uid).set('FAIL')
+      this.voted = true
     },
     handleReset () {
       ref.remove()
