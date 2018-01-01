@@ -15,7 +15,7 @@
     <br>
     <div class="row">
       <button @click.stop="handleReset"> RESET</button>
-      <button @click.stop="show = true"> REVEAL</button>
+      <button @click.stop="handleShow(show)"> {{show ? 'HIDE' : 'REVEAL'}}</button>
     </div>
     <!-- <section v-for="(page, i) in pages" :class="`section-${i} ${active === i ? 'active' : ''}`" :key="i" :style="`background-color: ${page.color}`" @click.stop="active = i">
       <button @click.stop="active = null">close</button>
@@ -29,8 +29,27 @@
 import * as firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/auth'
-const ref = firebase.database().ref('votes')
+const db = firebase.database()
+const ref = db.ref('votes')
 export default {
+  // firebase: {
+  //   // simple syntax, bind as an array by default
+  //   votes: ref,
+  //   passes: ref.orderByValue().equalTo('PASS'),
+  //   fails: ref.orderByValue().equalTo('FAIL'),
+  //   // can also bind to a query
+  //   // anArray: db.ref('url/to/my/collection').limitToLast(25)
+  //   // full syntax
+  //   show: {
+  //     source: db.ref('show'),
+  //     // optionally bind as an object
+  //     asObject: true,
+  //     // optionally provide the cancelCallback
+  //     cancelCallback: function () {},
+  //     // this is called once the data has been retrieved from firebase
+  //     readyCallback: function () {}
+  //   }
+  // },
   data () {
     return {
       active: null,
@@ -62,6 +81,9 @@ export default {
         console.log('USER', user.uid)
         vm.uid = user.uid
       }
+    })
+    db.ref('show').on('value', snap => {
+      vm.show = snap.exists() && snap.val()
     })
     ref.on('value', snap => {
       if (snap.exists()) {
@@ -104,6 +126,9 @@ export default {
     },
     handleReset () {
       ref.remove()
+    },
+    handleShow (show) {
+      db.ref('show').set(!show)
     }
   }
 }

@@ -1,4 +1,7 @@
+import Vue from 'vue'
+import VueFire from 'vuefire'
 import * as firebase from 'firebase/app'
+
 const config = {
   apiKey: 'AIzaSyDjecjTa-0KkisyAyV1pVR50lLpTEDvU4Y',
   authDomain: 'ackushiw.firebaseapp.com',
@@ -8,3 +11,4 @@ const config = {
   messagingSenderId: '5437409204'
 }
 firebase.initializeApp(config)
+Vue.use(VueFire)
